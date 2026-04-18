@@ -273,7 +273,12 @@
   <script>
     const SHEET_ID = '1h3ZnjMmwfC_jlLAto90GMuPkl4yQ5lfaQ7U4P1JtSfU';
     const SHEET_GID = '0';
-    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+    const SHEET_NAME = 'Tab';
+    const CSV_URLS = [
+      `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`,
+      `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=${encodeURIComponent(SHEET_NAME)}`,
+      `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`
+    ];
 
     const fallbackRows = [
       { day: 'Sat', date: '18/04/2026', start: '6:30', end: '8:30', duration: '120', location: 'Wadala', court: '3 Men Americano', players: 'Yogesh & Sahil to book other courts. Gautam Dubai to pay me 1200.' },
@@ -634,29 +639,36 @@
     }
 
     async function fetchCsv(url) {
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          cache: 'no-store',
-          mode: 'cors'
-        });
+      const response = await fetch(url, {
+        method: 'GET',
+        cache: 'no-store',
+        mode: 'cors'
+      });
 
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        return await response.text();
-      } catch (error) {
-        if (window.location.protocol === 'file:') {
-          throw new Error('This page is being opened as a local file. Many browsers restrict cross-origin requests from file:// pages. Host the HTML on a web server instead.');
-        }
-
-        if (error && error.message === 'Failed to fetch') {
-          throw new Error('The browser could not reach the Google Sheet CSV URL. The sheet may not be publicly accessible as CSV, the sheet tab gid may be wrong, or the preview environment may block cross-origin requests.');
-        }
-
-        throw error;
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
       }
+
+      return await response.text();
+    }
+
+    async function fetchFirstWorkingCsv(urls) {
+      const errors = [];
+
+      for (const url of urls) {
+        try {
+          const text = await fetchCsv(url);
+          return { text, url };
+        } catch (error) {
+          errors.push(`${url} -> ${error.message}`);
+        }
+      }
+
+      if (window.location.protocol === 'file:') {
+        throw new Error('This page is being opened as a local file. Many browsers restrict cross-origin requests from file:// pages. Host the HTML on a web server instead.');
+      }
+
+      throw new Error(`Tried ${urls.length} Google Sheets CSV endpoints and none worked. ${errors.join(' | ')}`);
     }
 
     async function loadLiveData() {
@@ -667,7 +679,7 @@
       hideNotice();
 
       try {
-        const csvText = await fetchCsv(CSV_URL);
+        const { text: csvText } = await fetchFirstWorkingCsv(CSV_URLS);
         const rows = normaliseRowsFromCsv(csvText);
 
         if (!rows.length) {
@@ -686,7 +698,9 @@
       console.assert(normaliseTime('19') === '19:00', 'normaliseTime should convert plain hours.');
       console.assert(normaliseTime('6.5') === '06:30', 'normaliseTime should convert decimal times.');
       console.assert(parseDate('18/04/2026', '6:30') instanceof Date, 'parseDate should return a Date for valid dd/mm/yyyy input.');
-      console.assert(CSV_URL.includes('export?format=csv&gid='), 'CSV_URL should use the Google Sheets CSV export format.');
+      console.assert(Array.isArray(CSV_URLS) && CSV_URLS.length === 3, 'CSV_URLS should define three fallback Google Sheets endpoints.');
+      console.assert(CSV_URLS[0].includes('gviz/tq?tqx=out:csv&sheet='), 'First URL should target the sheet by name through gviz CSV output.');
+      console.assert(CSV_URLS[2].includes('export?format=csv&gid='), 'Last URL should fall back to gid-based CSV export.');
 
       const sampleCsv = 'Day,Date,Start Time,End Time,Duration (Min),Location,Court,Players Payment/Remarks\nSat,18/04/2026,6:30,8:30,120,Wadala,3,Test Player';
       const parsedRows = normaliseRowsFromCsv(sampleCsv);
