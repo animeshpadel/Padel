@@ -1001,6 +1001,65 @@ table td:last-child, table th:last-child { text-align:left !important; }
 .calendar-day.is-next-booking .calendar-day-num .ball-text {
   text-shadow: 0 0 10px rgba(120, 224, 143, 0.6), 0 0 16px rgba(120, 224, 143, 0.4);
 }
+
+/* Custom animated SVG tennis ball for next upcoming booking */
+.calendar-day.is-next-booking .calendar-day-num .ball-text {
+  color: inherit !important;
+  text-shadow: none !important;
+}
+
+.tennis-ball-svg {
+  width: 1.15em;
+  height: 1.15em;
+  display: block;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 3px rgba(120, 224, 143, 0.35))
+    drop-shadow(0 0 8px rgba(120, 224, 143, 0.28));
+  transform-origin: 50% 50%;
+  animation: tennisBallSpinGlow 2.4s ease-in-out infinite;
+}
+
+@keyframes tennisBallSpinGlow {
+  0% {
+    transform: rotate(0deg) scale(0.96);
+    filter:
+      drop-shadow(0 0 2px rgba(120, 224, 143, 0.22))
+      drop-shadow(0 0 5px rgba(120, 224, 143, 0.16));
+  }
+  50% {
+    transform: rotate(180deg) scale(1.06);
+    filter:
+      drop-shadow(0 0 5px rgba(120, 224, 143, 0.48))
+      drop-shadow(0 0 12px rgba(120, 224, 143, 0.34));
+  }
+  100% {
+    transform: rotate(360deg) scale(0.96);
+    filter:
+      drop-shadow(0 0 2px rgba(120, 224, 143, 0.22))
+      drop-shadow(0 0 5px rgba(120, 224, 143, 0.16));
+  }
+}
+
+/* Mobile fix: search goes below countdown */
+@media (max-width: 700px){
+  .next-game-main{
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  #nextGameCountdown{
+    order: 1;
+    justify-content: center !important;
+  }
+
+  .search-center{
+    order: 2;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -1706,7 +1765,11 @@ table td:last-child, table th:last-child { text-align:left !important; }
 
         const ballText = document.createElement('span');
         ballText.className = 'ball-text';
-        ballText.textContent = '🎾';
+        ballText.innerHTML = `<svg class="tennis-ball-svg" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <circle cx="32" cy="32" r="24" fill="#b8ff4d"></circle>
+  <path d="M 20 10 C 35 18, 35 46, 20 54" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"></path>
+  <path d="M 44 10 C 29 18, 29 46, 44 54" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"></path>
+</svg>`;
 
         number.appendChild(dayText);
         number.appendChild(ballText);
