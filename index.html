@@ -27,7 +27,7 @@
       background-image: url('a_photograph_captures_an_updated_public_schedule_t.png');
       background-size: cover;
       background-position: center;
-      background-attachment: fixed;
+      background-attachment: scroll;
       color: var(--text);
       position: relative;
     }
@@ -51,10 +51,18 @@
     }
 
     .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: grid;
       grid-template-columns: 1.2fr 1fr 1fr auto;
       gap: 10px;
       margin-bottom: 14px;
+      padding: 12px;
+      background: rgba(11, 16, 32, 0.72);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
     }
 
     @media (max-width: 800px) {
@@ -78,6 +86,252 @@
       cursor: pointer;
     }
 
+
+    .next-game-banner {
+      display: none;
+      margin-bottom: 16px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.18);
+      color: var(--text);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.08);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+    }
+
+    .next-game-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(238, 242, 255, 0.72);
+      margin-bottom: 10px;
+    }
+
+    .next-game-main {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px 18px;
+    }
+
+    .flip-clock {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .flip-unit {
+      min-width: 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .flip-card {
+      position: relative;
+      width: 72px;
+      height: 84px;
+      perspective: 1000px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07));
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 10px 24px rgba(0,0,0,0.24);
+      backdrop-filter: blur(10px) saturate(150%);
+      -webkit-backdrop-filter: blur(10px) saturate(150%);
+    }
+
+    .flip-card.flipping .flip-card-inner {
+      animation: flipTick 0.55s ease;
+      transform-origin: center;
+    }
+
+    .flip-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: #f3fff7;
+      text-shadow: 0 2px 12px rgba(120, 224, 143, 0.25);
+      font-size: clamp(1.65rem, 4vw, 2.25rem);
+      letter-spacing: 0.04em;
+    }
+
+    .flip-card::before,
+    .flip-card::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      margin-top: -4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.24);
+      z-index: 3;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .flip-card::before {
+      left: -4px;
+    }
+
+    .flip-card::after {
+      right: -4px;
+    }
+
+    .flip-card .flip-card-inner::after {
+      content: '';
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      top: 50%;
+      height: 1px;
+      background: rgba(255,255,255,0.14);
+      z-index: 2;
+    }
+
+    .flip-unit-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(238, 242, 255, 0.72);
+    }
+
+    .next-game-meta {
+      min-width: 260px;
+      max-width: 420px;
+    }
+
+    .next-game-meta-card {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px) saturate(135%);
+      -webkit-backdrop-filter: blur(10px) saturate(135%);
+    }
+
+    .next-game-meta-heading {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(238, 242, 255, 0.62);
+      margin-bottom: 8px;
+    }
+
+    .next-game-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(243, 255, 247, 0.96);
+      font-size: 0.88rem;
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .next-game-meta-location {
+      color: rgba(238, 242, 255, 0.84);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    @keyframes flipTick {
+      0% { transform: rotateX(0deg) scale(1); }
+      40% { transform: rotateX(-10deg) scale(0.992); }
+      100% { transform: rotateX(0deg) scale(1); }
+    }
+
+    @media (max-width: 700px) {
+      .next-game-banner {
+        padding: 12px 12px 13px;
+        border-radius: 16px;
+      }
+
+      .next-game-main {
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .flip-clock {
+        gap: 6px;
+      }
+
+      .flip-unit {
+        min-width: 52px;
+        gap: 4px;
+      }
+
+      .flip-card {
+        width: 52px;
+        height: 62px;
+      }
+
+      .flip-card-inner {
+        border-radius: 12px;
+      }
+
+      .flip-value {
+        font-size: 1.35rem;
+      }
+
+      .flip-unit-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.06em;
+      }
+
+      .next-game-meta {
+        min-width: 100%;
+        max-width: 100%;
+      }
+
+      .next-game-meta-card {
+        padding: 10px 11px;
+        border-radius: 14px;
+      }
+
+      .next-game-meta-heading {
+        font-size: 0.66rem;
+        margin-bottom: 7px;
+      }
+
+      .meta-chip {
+        min-height: 28px;
+        padding: 5px 9px;
+        font-size: 0.78rem;
+      }
+
+      .next-game-meta-location {
+        font-size: 0.84rem;
+      }
+    }
+
     .notice {
       display: none;
       margin-bottom: 16px;
@@ -96,13 +350,13 @@
       background: rgba(10, 16, 32, 0.14);
       backdrop-filter: blur(8px) saturate(120%);
       box-shadow: 0 10px 40px rgba(0,0,0,0.35);
-      width: fit-content;
+      width: 100%;
       max-width: 100%;
       margin: 0 auto;
     }
 
     table {
-      width: max-content;
+      width: 100%;
       border-collapse: collapse;
       background: transparent;
       table-layout: auto;
@@ -135,7 +389,8 @@
 
     tr.is-selected td {
       background: rgba(120, 224, 143, 0.22);
-      box-shadow: inset 0 0 0 1px rgba(120, 224, 143, 0.34);
+      box-shadow: none;
+      border-bottom: none;
     }
 
     .loading, .empty {
@@ -159,7 +414,7 @@
     }
 
     .calendar-wrap {
-      margin: 24px auto 0;
+      margin: 24px auto 24px;
       width: fit-content;
       max-width: 100%;
       border: 1px solid rgba(255,255,255,0.15);
@@ -305,6 +560,56 @@
       <button id="refreshBtn" type="button">Refresh</button>
     </div>
 
+    <div id="nextGameBanner" class="next-game-banner">
+      <div class="next-game-label">Next</div>
+      <div class="next-game-main">
+        <div id="nextGameCountdown" class="flip-clock" aria-live="polite">
+          <div class="flip-unit">
+            <div class="flip-card" data-unit="days">
+              <div class="flip-card-inner">
+                <div class="flip-value">00</div>
+              </div>
+            </div>
+            <div class="flip-unit-label">Days</div>
+          </div>
+          <div class="flip-unit">
+            <div class="flip-card" data-unit="hours">
+              <div class="flip-card-inner">
+                <div class="flip-value">00</div>
+              </div>
+            </div>
+            <div class="flip-unit-label">Hours</div>
+          </div>
+          <div class="flip-unit">
+            <div class="flip-card" data-unit="minutes">
+              <div class="flip-card-inner">
+                <div class="flip-value">00</div>
+              </div>
+            </div>
+            <div class="flip-unit-label">Minutes</div>
+          </div>
+          <div class="flip-unit">
+            <div class="flip-card" data-unit="seconds">
+              <div class="flip-card-inner">
+                <div class="flip-value">00</div>
+              </div>
+            </div>
+            <div class="flip-unit-label">Seconds</div>
+          </div>
+        </div>
+        <div id="nextGameMeta" class="next-game-meta">
+          <div class="next-game-meta-card">
+            <div class="next-game-meta-heading">Upcoming match</div>
+            <div class="next-game-meta-row">
+              <span id="nextGameDateChip" class="meta-chip">--</span>
+              <span id="nextGameTimeChip" class="meta-chip">--</span>
+            </div>
+            <div class="next-game-meta-location" id="nextGameLocationText">--</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="notice" class="notice"></div>
     <div id="content"></div>
   </div>
@@ -319,6 +624,9 @@
       'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=' + SHEET_GID
     ];
 
+    const STORAGE_KEY = 'padelScheduleCacheV1';
+    const STORAGE_TS_KEY = 'padelScheduleCacheTimestampV1';
+
     const fallbackRows = [
       { day: 'Sat', date: '18/04/2026', start: '06:30', end: '08:30', duration: '120', location: 'Wadala', court: '3 Men Americano', players: 'Yogesh, Sahil, Gautam Dubai' },
       { day: 'Sun', date: '19/04/2026', start: '20:00', end: '21:30', duration: '90', location: 'Wadala', court: '3', players: 'AD, NMD, Sheldon, Rohit Ramaswamy' },
@@ -331,6 +639,19 @@
 
     const contentEl = document.getElementById('content');
     const noticeEl = document.getElementById('notice');
+    const nextGameBannerEl = document.getElementById('nextGameBanner');
+    const nextGameCountdownEl = document.getElementById('nextGameCountdown');
+    const nextGameMetaEl = document.getElementById('nextGameMeta');
+    const flipCardEls = {
+      days: nextGameCountdownEl.querySelector('[data-unit="days"]'),
+      hours: nextGameCountdownEl.querySelector('[data-unit="hours"]'),
+      minutes: nextGameCountdownEl.querySelector('[data-unit="minutes"]'),
+      seconds: nextGameCountdownEl.querySelector('[data-unit="seconds"]')
+    };
+    const nextGameDateChipEl = document.getElementById('nextGameDateChip');
+    const nextGameTimeChipEl = document.getElementById('nextGameTimeChip');
+    const nextGameLocationTextEl = document.getElementById('nextGameLocationText');
+    const previousCountdownValues = { days: '', hours: '', minutes: '', seconds: '' };
     const searchInput = document.getElementById('searchInput');
     const locationFilter = document.getElementById('locationFilter');
     const sortOrder = document.getElementById('sortOrder');
@@ -339,6 +660,163 @@
     let data = [];
     let calendarMonth = null;
     let selectedBookingDate = '';
+    let renderDebounceTimer = null;
+    let countdownInterval = null;
+    let lastRenderedRows = [];
+
+
+    function saveCache(rows) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
+        localStorage.setItem(STORAGE_TS_KEY, String(Date.now()));
+      } catch (error) {
+        // Ignore localStorage failures
+      }
+    }
+
+    function loadCache() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          return [];
+        }
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function getCacheTimestampLabel() {
+      try {
+        const raw = localStorage.getItem(STORAGE_TS_KEY);
+        if (!raw) {
+          return '';
+        }
+        const ts = Number(raw);
+        if (!ts) {
+          return '';
+        }
+        return new Date(ts).toLocaleString();
+      } catch (error) {
+        return '';
+      }
+    }
+
+    function validateHeaders(rows) {
+      if (!rows.length) {
+        throw new Error('The sheet is empty.');
+      }
+      const headers = headerIndexMap(rows[0]);
+      const required = ['date'];
+      required.forEach(function(key) {
+        if (headers[key] === undefined) {
+          throw new Error('Missing required column: ' + key);
+        }
+      });
+    }
+
+    function scheduleRender() {
+      clearTimeout(renderDebounceTimer);
+      renderDebounceTimer = setTimeout(render, 200);
+    }
+
+    function getUpcomingRows(rows) {
+      const now = new Date();
+      return rows
+        .map(function(item) {
+          return { item: item, dateValue: parseDateValue(item.date, item.start) };
+        })
+        .filter(function(entry) {
+          return entry.dateValue && entry.dateValue.getTime() >= now.getTime();
+        })
+        .sort(function(a, b) {
+          return a.dateValue.getTime() - b.dateValue.getTime();
+        });
+    }
+
+    function getCountdownParts(ms) {
+      const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      return {
+        days: String(days).padStart(2, '0'),
+        hours: String(hours).padStart(2, '0'),
+        minutes: String(minutes).padStart(2, '0'),
+        seconds: String(seconds).padStart(2, '0')
+      };
+    }
+
+    function setFlipValue(unit, value) {
+      const card = flipCardEls[unit];
+      if (!card) {
+        return;
+      }
+      const middle = card.querySelector('.flip-value');
+
+      if (previousCountdownValues[unit] === value) {
+        middle.textContent = value;
+        return;
+      }
+
+      middle.textContent = value;
+      card.classList.remove('flipping');
+      void card.offsetWidth;
+      card.classList.add('flipping');
+      previousCountdownValues[unit] = value;
+    }
+
+    function setFlipLiveState() {
+      ['days', 'hours', 'minutes', 'seconds'].forEach(function(unit) {
+        setFlipValue(unit, unit === 'seconds' ? 'GO' : '00');
+      });
+    }
+
+    function updateNextGameBanner(rows) {
+      clearInterval(countdownInterval);
+      const upcoming = getUpcomingRows(rows);
+      if (!upcoming.length) {
+        nextGameBannerEl.style.display = 'none';
+        return;
+      }
+
+      const nextGame = upcoming[0];
+      const item = nextGame.item;
+      const eventDate = nextGame.dateValue;
+
+      function paintCountdown() {
+        const diff = eventDate.getTime() - Date.now();
+        if (diff <= 0) {
+          setFlipLiveState();
+          return;
+        }
+        const parts = getCountdownParts(diff);
+        setFlipValue('days', parts.days);
+        setFlipValue('hours', parts.hours);
+        setFlipValue('minutes', parts.minutes);
+        setFlipValue('seconds', parts.seconds);
+      }
+
+      const dateLabel = [item.day, formatShortDate(item.date)].filter(Boolean).join(' • ');
+      const timeLabel = item.start || '--';
+      const locationLabel = [item.location, item.court ? 'Court ' + item.court : ''].filter(Boolean).join(' • ') || '--';
+
+      if (nextGameDateChipEl) {
+        nextGameDateChipEl.textContent = dateLabel || '--';
+      }
+      if (nextGameTimeChipEl) {
+        nextGameTimeChipEl.textContent = timeLabel;
+      }
+      if (nextGameLocationTextEl) {
+        nextGameLocationTextEl.textContent = locationLabel;
+      }
+
+      nextGameBannerEl.style.display = 'block';
+      paintCountdown();
+      countdownInterval = setInterval(paintCountdown, 1000);
+    }
 
     function showNotice(message) {
       noticeEl.textContent = message;
@@ -516,6 +994,7 @@
         return [];
       }
 
+      validateHeaders(rows);
       const headers = headerIndexMap(rows[0]);
       return rows.slice(1)
         .filter(function(row) {
@@ -672,7 +1151,7 @@
         tr.appendChild(courtTd);
 
         const playersTd = document.createElement('td');
-        playersTd.textContent = item.players || '';
+        playersTd.textContent = item.players || '--';
         tr.appendChild(playersTd);
 
         tbody.appendChild(tr);
@@ -836,9 +1315,14 @@
         });
 
       if (!filtered.length) {
+        lastRenderedRows = [];
+        updateNextGameBanner([]);
         setEmpty('No data found for the selected filters.');
         return;
       }
+
+      lastRenderedRows = filtered;
+      updateNextGameBanner(filtered);
 
       if (!calendarMonth) {
         calendarMonth = getCalendarAnchorMonth(filtered);
@@ -857,15 +1341,26 @@
           throw new Error('The sheet loaded but no valid dated rows were parsed.');
         }
         data = liveRows;
+        saveCache(liveRows);
         if (!calendarMonth) {
           calendarMonth = getCalendarAnchorMonth(liveRows);
         }
       } catch (error) {
-        data = fallbackRows;
-        if (!calendarMonth) {
-          calendarMonth = getCalendarAnchorMonth(fallbackRows);
+        const cachedRows = loadCache();
+        if (cachedRows.length) {
+          data = cachedRows;
+          if (!calendarMonth) {
+            calendarMonth = getCalendarAnchorMonth(cachedRows);
+          }
+          const tsLabel = getCacheTimestampLabel();
+          showNotice('Live Google Sheet data could not be loaded, so cached data is being shown instead' + (tsLabel ? ' (last updated ' + tsLabel + ')' : '') + '. ' + error.message);
+        } else {
+          data = fallbackRows;
+          if (!calendarMonth) {
+            calendarMonth = getCalendarAnchorMonth(fallbackRows);
+          }
+          showNotice('Live Google Sheet data could not be loaded, so backup data is being shown instead. ' + error.message);
         }
-        showNotice('Live Google Sheet data could not be loaded, so backup data is being shown instead. ' + error.message);
       }
       populateLocations();
       render();
@@ -912,12 +1407,11 @@
       calendarMonth = null;
     }
 
-    searchInput.addEventListener('input', render);
+    searchInput.addEventListener('input', scheduleRender);
     locationFilter.addEventListener('change', render);
     sortOrder.addEventListener('change', render);
     refreshBtn.addEventListener('click', loadData);
 
-    runTests();
     loadData();
   </script>
 </body>
