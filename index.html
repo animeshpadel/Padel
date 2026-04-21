@@ -1294,6 +1294,37 @@ tbody td:last-child,
 .table-wrap tbody td:last-child {
   text-align: left !important;
 }
+
+/* Increase side margins for table on desktop */
+.table-wrap {
+  margin-left: 40px !important;
+  margin-right: 40px !important;
+}
+
+/* Keep mobile unchanged */
+@media (max-width: 700px){
+  .table-wrap {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Increase desktop margins further */
+@media (min-width: 701px){
+  .table-wrap {
+    margin-left: 80px !important;
+    margin-right: 80px !important;
+  }
+}
+
+/* Center table as dashboard card on desktop */
+@media (min-width: 701px){
+  .table-wrap {
+    max-width: 1100px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
 </style>
 </head>
 <body>
