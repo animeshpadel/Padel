@@ -2338,8 +2338,7 @@ tbody td:last-child,
       const spotsLeft = Math.max(0, maxPlayers - playerCount);
 
       const playersBlock = playersArray.length
-        ? playersArray.map(function(player) { return '- ' + player; }).join('
-')
+        ? playersArray.map(function(player) { return '- ' + player; }).join('\n')
         : '- Open slots';
 
       const relativeLabel = getBookingRelativeLabel(item.date);
@@ -2361,8 +2360,7 @@ tbody td:last-child,
         message.push('', '🚨 ' + spotsLeft + ' spot' + (spotsLeft === 1 ? '' : 's') + ' left!');
       }
 
-      return message.join('
-');
+      return message.join('\n');
     }
 
     function shareOnWhatsApp(item) {
